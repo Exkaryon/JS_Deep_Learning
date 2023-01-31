@@ -129,7 +129,7 @@ async function train(model, epochs) {
         metrics: ['accuracy'],
     });
 
-    const batchSize = 1000;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
+    const batchSize = 250;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
     const validationSplit = 0.05;
     const totalNumBatches = Math.ceil(tensors.train.data.shape[0] * (1 - validationSplit) / batchSize) * epochs;      // Math.ceil(55000  *  (1 - 0.15)  /  320) * 3 = 441  всего батчей.
     ui.showModelParams({
@@ -190,7 +190,7 @@ async function train(model, epochs) {
                     val_acc: logs.val_acc
                 }, 'epochEnd');
 
-                //showPredictions(model);
+                showPredictions(model);
 
                 currentEpoch++;
                 valAcc = logs.val_acc;
@@ -205,22 +205,22 @@ async function showPredictions(model) {
     const testExamples = tensors.test.data.shape[0] > 50 ? 50 : tensors.test.data.shape[0];
     examples = speechData.getTestDataForVisual(tensors.test, testExamples);
 
-    console.log(tensors.test)
+    //console.log(tensors.test)
 
-    console.log(examples)
+//    console.log(examples)
     /* tf.argMax() возвращает индексы максимальных значений в тензоре вдоль определенной оси. Задачи категориальной классификации, подобные этой, часто представляют классы в виде одномерных векторов.
     Одномерные векторы - это одномерные векторы с одним элементом для каждого выходного класса. Все значения в векторе равны 0 за исключением одного, который имеет значение 1 (например [0, 0, 0, 1, 0]).
     Результатом model.predict() будет распределение вероятностей, поэтому мы используем argMax, чтобы получить индекс векторного элемента, который имеет наибольшую вероятность. Это наш прогноз.
     (например, argmax([0.07, 0.1, 0.03, 0.75, 0.05]) == 3) функция dataSync() синхронно загружает значения tf.tensor из графического процессора, чтобы мы могли использовать их в нашем обычном
     коде CPU JavaScript (для неблокирующей версии этой функции используйте data()). */
 
-//    tf.tidy(() => {     // Код, заключенный в обратный вызов функции tf.tidy(), будет иметь свои тензоры, освобожденные из памяти графического процессора после выполнения без необходимости вызывать dispose(). Обратный вызов tf.tidy выполняется синхронно. tf.tidy() предотвращает утечки памяти WebGL.
-//        const output = model.predict(examples.xs);                                  // Модель возвращает классы в виде тензора.
-//        const axis = 1;
-//        const labels = Array.from(examples.labels.argMax(axis).dataSync());         // Метки (классы) размеченных данных (массив чисел от 0 до 10)
-//        const predictions = Array.from(output.argMax(axis).dataSync());             // Предсказания (массив чисел от 0 до 10)
-//        ui.showTestResults(examples, predictions, labels);                          // Визуально сверяем на примерах данных предсказания с метками классов.
-//    });
+    tf.tidy(() => {     // Код, заключенный в обратный вызов функции tf.tidy(), будет иметь свои тензоры, освобожденные из памяти графического процессора после выполнения без необходимости вызывать dispose(). Обратный вызов tf.tidy выполняется синхронно. tf.tidy() предотвращает утечки памяти WebGL.
+        const output = model.predict(examples.dataForVisual);                           // Модель возвращает классы в виде тензора.
+        const axis = 1;
+        const labels = Array.from(examples.labelsForVisual.argMax(axis).dataSync());    // Метки (классы) размеченных данных (массив чисел от 0 до 10)
+        const predictions = Array.from(output.argMax(axis).dataSync());                 // Предсказания (массив чисел от 0 до 10)
+        ui.showTestResults(examples, predictions, labels);                              // Визуально сверяем на примерах данных предсказания с метками классов.
+    });
 }
 
 

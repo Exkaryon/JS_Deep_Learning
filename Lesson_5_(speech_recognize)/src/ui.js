@@ -201,3 +201,34 @@ export function plotAccuracy(logs, progressType){
         }
     );
 }
+
+
+
+export function showTestResults(examples, predictions, labels){
+    let productivity = 0;
+    const testExamples = examples.dataForVisual.shape[0];              // exampleBatch.xs.shape = [100, 28, 28, 1]
+    //imagesElement.innerHTML = '';
+
+    for (let i = 0; i < testExamples; i++) {
+        const prediction = predictions[i];
+        const label = labels[i];
+        const correct = prediction === label;
+
+/*         const pred = document.createElement('div');
+        pred.className = `pred ${(correct ? 'pred-correct' : 'pred-incorrect')}`;
+        pred.innerText = `pred: ${prediction} [${label}]`; */
+
+        console.log(`Pred: ${speechData.dataInfo.classes[prediction]} | Label: ${speechData.dataInfo.classes[label]}  ${correct ? '+++' : ''}`);
+
+        if(correct) productivity++;
+    }
+
+/* 
+    console.log(examples);
+    console.log(predictions);
+    console.log(labels);
+ */
+    console.log("======");
+
+
+}
