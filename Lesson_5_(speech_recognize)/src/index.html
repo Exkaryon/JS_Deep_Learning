@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классификация звуков (Speech-Recognize)</title>
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+    <div class="cover">
+        <h1>TensorFlow.js: распознование звуков со сверточными слоями.</h1>
+        <p>Обучите модель распознавать звуки из звуковых файлов *.wav набора mini_speech_commands (https://www.tensorflow.org/tutorials/audio/simple_audio).<br>Примеры содержат 8 классов (значений звуков).</p>
+        
+        <h3>ОПИСАНИЕ</h3>
+        <p>Этот пример позволяет обучить распознаватель звуков с помощью сверточной нейронной сети (также известной как ConvNet или CNN (Convolutional Neural Network)).<br>Аналогично MNIST, для классификации звуков можно сделать не сверточную модель, а DenseNet (Connected Neural Network), поскольку в основе работы модели лежит классификация гистограмм звуков, а не самих звуков.</p>
+
+        <h3>ПОДГОТОВКА</h3>
+        <p>Создание стандартизированных виртуальных спектрограмм (массивов) из звуковых файлов набора данных.</p>
+        <div class="getdata-box">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <b>FFT Size</b><br><i>Значение определяет на сколько частотных областей будут разбиты аудиокадры или др.словами - высоту спектрограммы равную ½ FFT Size.</i>
+                        </td>
+                        <td>
+                            <select id="fft_size_option">
+                                <option value="256">256</option>
+                                <option value="128">128</option>
+                                <option value="64">64</option>
+                                <option value="32">32</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Размер буфера определяющий аудиокадр</b><br><i>Значение определяет сколько байт будет в аудиокадре. Чем больше байт, тем меньше получится кадров и тем меньше получится ширина спектрограммы (Число кадров = audioBuffer / bufferSize).</i>
+                        </td>
+                        <td>
+                            <select id="buffer_size_option">
+                                <option value="256">256</option>
+                                <option value="512">512</option>
+                                <option value="1024">1024</option>
+                                <option value="1024">2048</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Удалить верхние частоты</b><br><i>Опция позволяет удалить половину спектрограммы, отрезав верхние частоты (½ от всего диаппазона частот), поскольку они часто бывают пустыми. Это помогает уменьшить рамер данных в 2 раза без потери важных признаков.</i></td>
+                        <td><input type="checkbox" id="delete_high_freq"></input></td>
+                    </tr>
+                </table>
+                <button id="create-spectrogram">Создать спектрограммы</button>
+            </div>
+            <div>
+                <button id="load-json-data">Загрузить готовые данные</button>
+                <p><i>* Из предварительно сохраненного файла (./dataset/msc_ready_data.json) с готовыми данными сперктрограмм для создания тензоров.</i></p>
+            </div>
+        </div>
+
+        <h3>ПАРАМЕТРЫ ОБУЧЕНИЯ</h3>
+        <div id="train_params">
+            <table class="control">
+                <tr>
+                    <td>Тип модели</td>
+                    <td><select><option value="convnet">ConvNet</option><option value="densenet">DenseNet</option></select></td>
+                </tr>
+                <tr>
+                    <td>Тренировочных эпох:</td>
+                    <td><input type="text"  name="epochs" value="3" size="5"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"style="padding-top:5px;"><button disabled>Начать обучение</button></td>
+                </tr>
+            </table>
+            <div class="train-info">&nbsp;</div>
+        </div>
+
+        <div id="logs">&nbsp;</div>
+
+
+        <h3>ХОД ОБУЧЕНИЯ</h3>
+        <div class="container">
+            <section>
+                <h4>График потерь</h4>
+                <div id="plotLoss"></div>
+            </section>
+            <section>
+                <h4>График точности</h4>
+                <div id="plotAccuracy"></div>
+            </section>
+            <section>
+                <h4>Примечания</h4>
+                <ol>
+                    <li>Серьезного переобучения нет, если значения потерь и безошибочности на проверочном наборе данных (<b>validation</b>) не слишком отклоняются от соответствующих значений (<b>train</b>) при обучении.</li>
+                    <li>Б<i><b>о</b></i>льшие разрешающие возможности модели приводят к большему риску переобучения.</li>
+                    <li>Замечено, что, чем больше данных в датасете, тем меньше и позже проявляется эффект переобучения. To есть, модель менее склонна "запоминать" примеры данных, когда их много.</li>
+                    <li>Замечено, что больший размер батча (batchSize) слегка улучшает эффективность обучения за равное кол-во батчей за обучение (обнаружено на наборе данных с разрешением спектрограмм FFT Size: 32, Buffer Size: 2048 (16px × 46px))</li>
+                </ol>
+                
+            </section>
+        </div>
+
+
+</body>
+</html>
