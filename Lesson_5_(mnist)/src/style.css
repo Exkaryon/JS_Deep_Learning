@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font: 18px Calibri, sans-serif, Arial;
+    line-height: 130%;
+}
+
+h1, h3, h4 {
+    margin: 25px 0 14px;
+    line-height: 100%;
+    position: relative;
+}
+
+h3 {
+    font-weight: 300;
+    font-size: 110%;
+    letter-spacing: 0.1em;
+    color: #595959;
+}
+h3::before {
+    content: '';
+    display: block;
+    position: absolute;
+    margin-left: -20px;
+    width: 1px;
+    height: 100%;
+    background: #f90;
+}
+
+p {
+    margin: 14px 0 0;
+}
+
+button {
+    background: #f70;
+    color: #fff;
+    font: 100% Calibri, sans-serif, Arial;
+    border: solid 1px #000;
+    padding: 5px 14px;
+    cursor: pointer;
+    text-shadow: 0 0 1px #000;
+    box-shadow: 2px 2px 5px #0009;
+    position: relative;
+}
+
+button:active {
+    top:2px;
+    left:1px;
+}
+
+.cover {
+    min-width: 1000px;
+    margin: auto 15%; 
+}
+
+.container {
+    display: flex;
+    justify-content:flex-start;
+}
+
+.container section {
+    border: solid 1px #eee;
+    background: #e3e3e3;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+#logs {
+    font: 12px 'Lucida Console';
+    color: #090;
+}
+
+#run button {
+    margin: 14px 0;
+}
+
+.control td {
+    padding-right: 20px;
+}
+
+
+#images {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+#images .pred-container {
+    width: 90px;
+    border: solid 1px #fff;
+    height: 110px;
+}
+
+#images .pred-container .pred {
+    height: 20px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+}
+#images .pred-container .pred-correct {background-color: #050;}
+#images .pred-container .pred-incorrect {background-color: #700;}
+#images .pred-container .prediction-canvas {width: 100%;}

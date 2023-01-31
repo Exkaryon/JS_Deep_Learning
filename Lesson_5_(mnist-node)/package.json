@@ -1,0 +1,19 @@
+{
+  "name": "mnist-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [
+    "mnist",
+    "node",
+    "tfjs"
+  ],
+  "author": "Exkar <exkaryon@ya.ru>",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.0.0"
+  }
+}

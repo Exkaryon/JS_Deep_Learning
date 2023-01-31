@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бинарная классификация (Websites-Phishing)</title>
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <div id="canvas">
+        
+    </div>
+
+
+
+
+
+    <div class="cover">
+        <h1>TensorFlow.js: распознаватель цифр со сверточными слоями</h1>
+        <p>Обучите модель распознавать рукописные цифры из базы данных MNIST, используя API tf.layers.</p>
+        
+        <h3>ОПИСАНИЕ</h3>
+        <p>Этот пример позволяет обучить распознаватель рукописных цифр с помощью либо сверточной нейронной сети (также известной как ConvNet или CNN (Convolutional Neural Network)), либо полностью связанной нейронной сети (Connected Neural Network - также известной как DenseNet).</p>
+        <p>Набор данных MNIST используется в качестве обучающих данных.</p>
+
+        <h3>ПАРАМЕТРЫ ОБУЧЕНИЯ</h3>
+        <table class="control">
+            <tr>
+                <td>Тип модели</td>
+                <td><select><option value="convnet">ConvNet</option><option value="densenet">DenseNet</option></select></td>
+            </tr>
+            <tr>
+                <td>Тренировочных эпох:</td>
+                <td><input type="text"  name="epochs" value="3" size="5"></td>
+            </tr>
+        </table>
+        <div id="run"><button>Загрузить данные и начать обучение</button></div>
+        <div id="logs">
+            <div class="preparation"></div>
+            <div class="train"></div>
+        </div>
+
+        <h3>ХОД ОБУЧЕНИЯ</h3>
+        <div class="container">
+            <section>
+                <h4>График потерь</h4>
+                <div id="plotLoss"></div>
+            </section>
+            <section>
+                <h4>График точности</h4>
+                <div id="plotAccuracy"></div>
+            </section>
+        </div>
+
+        <h3>ПРИМЕРЫ ВЫВОДА</h3>
+        <div id="productivity"></div>
+        <div id="images"></div>
+    </div>
+
+</body>
+</html>
