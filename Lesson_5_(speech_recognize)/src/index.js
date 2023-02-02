@@ -129,8 +129,8 @@ async function train(model, epochs) {
         metrics: ['accuracy'],
     });
 
-    const batchSize = 250;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
-    const validationSplit = 0.05;
+    const batchSize = 1200;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
+    const validationSplit = 0.15;
     const totalNumBatches = Math.ceil(tensors.train.data.shape[0] * (1 - validationSplit) / batchSize) * epochs;      // Math.ceil(55000  *  (1 - 0.15)  /  320) * 3 = 441  всего батчей.
     ui.showModelParams({
         batchSize,
@@ -202,7 +202,7 @@ async function train(model, epochs) {
 
 
 async function showPredictions(model) {
-    const testExamples = tensors.test.data.shape[0] > 50 ? 50 : tensors.test.data.shape[0];
+    const testExamples = tensors.test.data.shape[0] > 100 ? 100 : tensors.test.data.shape[0];
     examples = speechData.getTestDataForVisual(tensors.test, testExamples);
 
     //console.log(tensors.test)

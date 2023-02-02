@@ -8,6 +8,9 @@ const getDataBox = document.querySelector('div.getdata-box');
 const fftSizeOpts = document.getElementById('fft_size_option');
 const bufferSizeOpts = document.getElementById('buffer_size_option');
 const deleteHFOpt = document.getElementById('delete_high_freq');
+const productivityString = document.getElementById('productivity');
+const predElements = document.getElementById('pred-container');
+
 // Параметры для спектрограмм, передаются в SpectrogramCreator.
 export const preparingDataOptions = {
     fftSize: 0,
@@ -207,28 +210,17 @@ export function plotAccuracy(logs, progressType){
 export function showTestResults(examples, predictions, labels){
     let productivity = 0;
     const testExamples = examples.dataForVisual.shape[0];              // exampleBatch.xs.shape = [100, 28, 28, 1]
-    //imagesElement.innerHTML = '';
-
+    predElements.innerHTML = '<div><div>Real</div><div>Pred</div></div>';
     for (let i = 0; i < testExamples; i++) {
         const prediction = predictions[i];
         const label = labels[i];
         const correct = prediction === label;
-
-/*         const pred = document.createElement('div');
-        pred.className = `pred ${(correct ? 'pred-correct' : 'pred-incorrect')}`;
-        pred.innerText = `pred: ${prediction} [${label}]`; */
-
-        console.log(`Pred: ${speechData.dataInfo.classes[prediction]} | Label: ${speechData.dataInfo.classes[label]}  ${correct ? '+++' : ''}`);
-
+        const pred = document.createElement('div');
+        pred.className = correct ? 'correct' : 'incorrect';
+        pred.innerHTML = `<div>${speechData.dataInfo.classes[label]}</div><div>${speechData.dataInfo.classes[prediction]}</div>`;
+        predElements.appendChild(pred);
         if(correct) productivity++;
     }
 
-/* 
-    console.log(examples);
-    console.log(predictions);
-    console.log(labels);
- */
-    console.log("======");
-
-
+    productivityString.innerHTML = `Продуктивность модели на данной выборке: <b>${(productivity / testExamples * 100).toFixed(1)}%</b>`;
 }

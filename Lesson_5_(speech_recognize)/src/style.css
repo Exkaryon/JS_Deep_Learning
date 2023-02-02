@@ -171,3 +171,48 @@ button:active {
     height: 8px;
     width: 0%;
 }
+
+#pred-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+#pred-container > div {
+    border: solid 1px #ccc;
+    color: #fff;
+    background-color: #e3e3e3;
+    font-size: 15px;
+    width: 50px;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+}
+#pred-container > div div:first-child {
+    color: #fff;
+    background-color: #595959;
+}
+#pred-container > div div:last-child {
+    color: #595959;
+    background-color: #fff;
+}
+
+
+
+#pred-container > div.incorrect div:first-child {
+    color: #fff;
+    background-color: #cc2200;
+}
+#pred-container > div.incorrect div:last-child {
+    color: #cc2200;
+    background-color: #fff;
+}
+
+#pred-container > div.correct div:first-child {
+    color: #fff;
+    background-color: #007700;
+}
+#pred-container > div.correct div:last-child {
+    color: #007700;
+    background-color: #fff;
+}
