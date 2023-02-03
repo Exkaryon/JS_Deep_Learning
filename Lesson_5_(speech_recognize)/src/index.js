@@ -86,17 +86,17 @@ export function createConvModel(){
         layers: [
             tf.layers.conv2d({                          // На входе [28, 28, 1], => на выходе дает тензор [26, 26, 16].  26 - кол-во перемещений ядра (окна) размером 3 по исходной картинке по высоте или по ширине.
                 inputShape: [speechData.dataInfo.spectroSize.y, speechData.dataInfo.spectroSize.x, 1],          // высота, ширина, глубина (1 канал).
-                kernelSize: 3,                              // размер ядра 3 на 3 пикселя. Окно 3 на 3 будет шагать по основному изображению по всем возможным положениям и возвращать эти миникартинки (тензоры) фильтру, который затем разобьет его на 16 срезов и выполнит склярное произведение H*W*C для каждого среза, вернув новый 3d-тензор вида: [кол-во шагов окна по ширине входного изображения, высоте, глубину 16], где каждое значение будет хранить произведение срезов. 
+                kernelSize: [3, 4],                              // размер ядра 3 на 3 пикселя. Окно 3 на 3 будет шагать по основному изображению по всем возможным положениям и возвращать эти миникартинки (тензоры) фильтру, который затем разобьет его на 16 срезов и выполнит склярное произведение H*W*C для каждого среза, вернув новый 3d-тензор вида: [кол-во шагов окна по ширине входного изображения, высоте, глубину 16], где каждое значение будет хранить произведение срезов. 
                 filters: 16,                                // количество фильтров в свертке, каналов выходного сигнала или глубина сверточного ядра - по сути кол-во усваиваемых признаков входного изображения, например: прямолинейных границ, углов цвета и т.д.
                 activation: 'relu'
             }),
-            tf.layers.maxPooling2d({                    // Операция субдискретизации с выбором максимального значения из "окна" для каждого измерения глубины. Таким образом, если входной тензор [26, 26, 16], то выходной получится [13, 13, 16]. Слой maxPooling2d также уменьшает чувствительность к положению распознаваемого символа на холсте. 
+/*             tf.layers.maxPooling2d({                    // Операция субдискретизации с выбором максимального значения из "окна" для каждого измерения глубины. Таким образом, если входной тензор [26, 26, 16], то выходной получится [13, 13, 16]. Слой maxPooling2d также уменьшает чувствительность к положению распознаваемого символа на холсте. 
                 poolSize: 2,                                // размер "окна" или поля, подобное ядру в conv2d. 2 на 2.
                 strides: 2                                  // шаг 2 означает, что "окно" шагает по две "клетки"
-            }),
+            }), */
             tf.layers.conv2d({                          // на входе [13, 13, 16], на выходе [11, 11, 32]
-                kernelSize: 3,
-                filters: 32,
+                kernelSize: [3, 4],
+                filters: 8,
                 activation: 'relu'
             }),
             tf.layers.maxPooling2d({
@@ -122,14 +122,14 @@ export function createConvModel(){
 
 
 
-async function train(model, epochs) {
+async function train(model, epochs, modelType) {
     model.compile({
         optimizer: 'rmsprop', // tf.train.sgd(0.05), // 'rmsprop'  - показал себя эффективней, 
         loss: 'categoricalCrossentropy',
         metrics: ['accuracy'],
     });
 
-    const batchSize = 1200;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
+    const batchSize = 300;                  // Преимущество большого размера батчей заключается в более согласованном и менее подверженном изменениям градиентном обновлении весов, но требует больше оперативки.
     const validationSplit = 0.15;
     const totalNumBatches = Math.ceil(tensors.train.data.shape[0] * (1 - validationSplit) / batchSize) * epochs;      // Math.ceil(55000  *  (1 - 0.15)  /  320) * 3 = 441  всего батчей.
     ui.showModelParams({
@@ -190,11 +190,14 @@ async function train(model, epochs) {
                     val_acc: logs.val_acc
                 }, 'epochEnd');
 
-                showPredictions(model);
+                if(modelType == 'densenet') showPredictions(model);
 
                 currentEpoch++;
                 valAcc = logs.val_acc;
             },
+            onTrainEnd: () => {
+                if(modelType == 'convnet') showPredictions(model);
+            }
         }
     });
 }
@@ -229,7 +232,7 @@ export async function runButtonCallback(params){
     ui.logStatus({mess: `Создание ${params.modelType}-модели...`}); 
     const model = {model: createModel(params.modelType)} ;
     ui.logStatus({mess: `Обучение модели:`});
-    await train(model.model, params.epochs);
+    await train(model.model, params.epochs, params.modelType);
     //showPredictions(model.model);
 }
 
