@@ -29,7 +29,7 @@ async function run(epochs, batchSize, modelSavePath) {
         epochs,
         batchSize,
         validationSplit,
-        callbacks: {
+/*         callbacks: {
             onBatchBegin: () => {
                 batchTime.start = Date.now();
             },
@@ -38,7 +38,7 @@ async function run(epochs, batchSize, modelSavePath) {
                 console.log('Батч: '+batch, ' | Время обработки: '+ ((batchTime.end - batchTime.start) / 1000)+ ' секунд');
                 console.log(logs);
             }
-        }
+        } */
     });
     console.log('Обучение завершено!');
 

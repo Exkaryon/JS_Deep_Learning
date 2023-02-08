@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs');
 
 
 // Упрощенная модель, которая используется в браузере.
-const model = tf.sequential({
+/* const model = tf.sequential({
     layers: [
         tf.layers.conv2d({inputShape: [28, 28, 1], kernelSize: 3, filters: 16, activation: 'relu'}),
         tf.layers.maxPooling2d({poolSize: 2, strides: 2}),
@@ -13,10 +13,9 @@ const model = tf.sequential({
         tf.layers.dense({units: 10, activation: 'softmax'})
     ]
 });
-
+ */
 
 // Расширенная модель для обучения с помощью Node.js.
-/*
 const model = tf.sequential({
     layers: [
         tf.layers.conv2d({
@@ -55,7 +54,7 @@ const model = tf.sequential({
         })
     ]
 });
-*/
+
 
 model.compile({
   optimizer: 'rmsprop',
