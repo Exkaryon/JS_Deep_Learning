@@ -1,8 +1,8 @@
 const data = require('./data');
 const model = require('./model');
-const tf = require('@tensorflow/tfjs-node');      // Для ускоренного обучения. На процессорах без инструкций AVX работать не будет, выдаст ошибку: A dynamic link library (DLL) initialization routine failed.
+//const tf = require('@tensorflow/tfjs-node');      // Для ускоренного обучения. На процессорах без инструкций AVX работать не будет, выдаст ошибку: A dynamic link library (DLL) initialization routine failed.
 //const tf = require('@tensorflow/tfjs');             // Альтернатива, если tfjs-node не работает, будет медленно обучать, но работать будет на любом оборудовании.
-
+const tf = require('@tensorflow/tfjs-node-gpu')
 
 
 let batchTime = {start: 0, end: 0};
